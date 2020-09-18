@@ -1,26 +1,27 @@
 module.exports = {
+
   development: {
-    client: 'pg',
-    connection:'postgres://localhost/development',
-    migrations: {
-      directory: './data/migrations'
-    },
-    seeds: {
-      directory: './data/seeds/dev'
+    client: 'sqlite3',
+    connection: {
+      filename: './dev.sqlite3'
     },
     useNullAsDefault: true
   },
 
-  test: {
+  staging: {
     client: 'pg',
-    connection:'postgres://localhost/testing',
+    connection: {
+      database: '',
+      user:     'username',
+      password: 'password'
+    },
+    pool: {
+      min: 2,
+      max: 10
+    },
     migrations: {
-      directory: './data/migrations'
-    },
-    seeds: {
-      directory: './data/seeds/test'
-    },
-    useNullAsDefault: true
+      tableName: 'knex_migrations'
+    }
   },
 
   production: {
@@ -34,4 +35,5 @@ module.exports = {
     },
     useNullAsDefault: true
   }
-}
+
+};

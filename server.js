@@ -3,6 +3,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 // Import router files here
 // const someRouter = require("./someRoute/some-router")
+const usersRouter = require('./auth/user-router');
 
 const server = express();
 
@@ -12,6 +13,7 @@ server.use(cors());
 server.use(express.json());
 // Add your router file(s) here
 // server.use("/someRoute", someRouter);
+server.use(usersRouter);
 
 // Message for "/" endpoint: Ex.: Dellrodar.herokuapp.com/
 server.get("/", (req, res) => {
