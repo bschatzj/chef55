@@ -1,4 +1,7 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const Users = require('./user-model');
 const restrict = require('../middleware/restrict');
 
 const router = express.Router();
@@ -6,7 +9,8 @@ const router = express.Router();
 router.post('/login', async (req, res, next) => {
   try {
 		const { username, password } = req.body;
-		const user = await Users.findBy({ username }).first();
+    const user = await Users.findBy({ username }).first();
+    console.log(user);
 
 		if (!user) {
 			return res.status(401).json({
@@ -23,12 +27,12 @@ router.post('/login', async (req, res, next) => {
     }
     const token = jwt.sign({
       userID: user.id,
-      userName: user.username
+      userName: user.name,
     }, process.env.JWT_SECRET)
 
     res.cookie("token", token)
     res.json({
-      message: `Welcome ${user.username}!`,
+      message: `Welcome ${user.name}!`,
     });
   } catch (err) {
     return next(err)
@@ -38,7 +42,7 @@ router.post('/login', async (req, res, next) => {
 router.post('/register', async (req, res, next) => {
   try {
     const hashAmount = parseInt(process.env.HASH_AMOUNT)
-		const { username, password } = req.body;
+		const { username, password, name } = req.body;
 		const user = await Users.findBy({ username }).first();
 
 		if (user) {
@@ -49,8 +53,11 @@ router.post('/register', async (req, res, next) => {
 
 		const newUser = await Users.add({
 			username,
-			password: await bcrypt.hash(password, hashAmount),
+      password: await bcrypt.hash(password, hashAmount),
+      name,
     });
+
+    return res.status(201).json(newUser);
    } catch(err) {
     return next(err);
   }

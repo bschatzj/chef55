@@ -14,14 +14,15 @@
 		"postgres": "^1.0.2"
 	},
 	"devDependencies": {
-		"nodemon": "^2.0.4",
 		"cross-env": "^7.0.2",
+		"dotenv": "^8.2.0",
+		"nodemon": "^2.0.4",
 		"sqlite3": "^5.0.0"
 	},
 	"scripts": {
-		"server": "nodemon index.js",
+		"server": "nodemon --require dotenv/config index.js",
 		"test": "jest",
-		"start": "node server.js",
+		"start": "node index.js",
 		"migrate": "npx knex migrate:latest && npx knex seed:run"
 	},
 	"repository": {

@@ -9,31 +9,40 @@ module.exports = {
   },
 
   staging: {
-    client: 'pg',
+    client: "sqlite3",
+    useNullAsDefault: true,
     connection: {
-      database: '',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
+      filename: "./data/staging-recipes.db3",
     },
     migrations: {
-      tableName: 'knex_migrations'
-    }
+      directory: "./data/migrations",
+    },
+    seeds: {
+      directory: "./data/seeds",
+    },
+    pool: {
+      afterCreate: (conn, done) => {
+        conn.run("PRAGMA foreign_keys = ON", done)
+      },
+    },
   },
 
   production: {
-    client: 'pg',
-    connection: process.env.DATABASE_URL,
+    client: "sqlite3",
+    useNullAsDefault: true,
+    connection: {
+      filename: "./data/recipes.db3",
+    },
     migrations: {
-      directory: './data/migrations'
+      directory: "./data/migrations",
     },
     seeds: {
-      directory: './data/seeds/production'
+      directory: "./data/seeds",
     },
-    useNullAsDefault: true
+    pool: {
+      afterCreate: (conn, done) => {
+        conn.run("PRAGMA foreign_keys = ON", done)
+      },
+    },
   }
-
 };
