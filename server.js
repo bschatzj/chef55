@@ -9,7 +9,23 @@ const server = express();
 
 
 server.use(helmet());
-server.use(cors());
+let whitelist = ['http://localhost:8080', 'https://tt720-secret-family-recipes.herokuapp.com/']
+
+server.use(cors({
+  origin: function(origin, callback){
+    // allow requests with no origin
+    if (!origin) {
+        return callback(null, true);
+    }
+    if (whitelist.indexOf(origin) === -1) {
+      var message = 'The CORS policy for this origin doesn\'t allow access from the particular origin.';
+      return callback(new Error(message), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
+
 server.use(express.json());
 // Add your router file(s) here
 // server.use("/someRoute", someRouter);
