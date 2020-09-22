@@ -9,7 +9,7 @@ const server = express();
 
 
 server.use(helmet());
-let whitelist = ['http://localhost:8080', 'https://tt720-secret-family-recipes.herokuapp.com/']
+let whitelist = ['http://localhost:8080','http://localhost:3000', 'https://secretrecipes.vercel.app/', 'https://tt720-secret-family-recipes.herokuapp.com/']
 
 server.use(cors({
   origin: function(origin, callback){
