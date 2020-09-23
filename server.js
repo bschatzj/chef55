@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 // const someRouter = require("./someRoute/some-router")
 const usersRouter = require('./auth/user-router');
 const recipesRouter = require('./recipes/recipes-router');
+const measurementsRouter = require('./measurements/measurements-router');
 
 const server = express();
 
@@ -34,6 +35,7 @@ server.use(cookieParser());
 // server.use("/someRoute", someRouter);
 server.use(usersRouter);
 server.use('/recipes', recipesRouter);
+server.use(measurementsRouter);
 
 // Message for "/" endpoint: Ex.: Dellrodar.herokuapp.com/
 server.get("/", (req, res) => {

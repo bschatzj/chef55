@@ -11,16 +11,17 @@
 
 ## Endpoints
 
-| Type   | Endpoint        | Required                                             | Optional                                                                 |
-| ------ | --------------- | ---------------------------------------------------- | ------------------------------------------------------------------------ |
-| POST   | `/login`        | `username`, `password`                               | none                                                                     |
-| POST   | `/register`     | `username`, `password`                               | `name`                                                                   |
-| GET    | `/recipes`      | none                                                 | none                                                                     |
-| GET    | `/recipes/:id`  | `id`                                                 | none                                                                     |
-| POST   | `/recipes`      | `title`, `ingredients`, `instructions`, `categoryId` | `imgUrl`, `source`                                                       |
-| PUT    | `/recipes/:id`  | `id`                                                 | `title`, `ingredients`, `instructions`, `categoryId`, `imgUrl`, `source` |
-| DELETE | `recipes/:id`   | `id`                                                 | none                                                                     |
-| GET    | `/measurements` | none                                                 | none                                                                     |
+| Type   | Endpoint             | Required                                             | Optional                                                                 | Use                                                  |
+| ------ | -------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------- |
+| POST   | `/login`             | `username`, `password`                               | none                                                                     | Used to login to site.                               |
+| POST   | `/register`          | `username`, `password`                               | `name`                                                                   | Used to send registration information to make a user |
+| GET    | `/users/:id/recipes` | `id`                                                 |                                                                          | Gets recipes for a specific user                     |
+| GET    | `/recipes`           | none                                                 | none                                                                     | Gets all recipes                                     |
+| GET    | `/recipes/:id`       | `id`                                                 | none                                                                     | Get a recipe by its ID                               |
+| POST   | `/recipes`           | `title`, `ingredients`, `instructions`, `categoryId` | `imgUrl`, `source`                                                       | Posts a new recipe.                                  |
+| PUT    | `/recipes/:id`       | `id`                                                 | `title`, `ingredients`, `instructions`, `categoryId`, `imgUrl`, `source` | Updates an existing recipe by id                     |
+| DELETE | `recipes/:id`        | `id`                                                 | none                                                                     | deletes a recipe by id                               |
+| GET    | `/measurements`      | none                                                 | none                                                                     | get all measurements                                 |
 
 ## Objects
 
