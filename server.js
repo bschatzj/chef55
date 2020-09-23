@@ -4,6 +4,7 @@ const cors = require('cors');
 // Import router files here
 // const someRouter = require("./someRoute/some-router")
 const usersRouter = require('./auth/user-router');
+const recipesRouter = require('./recipes/recipes-router');
 
 const server = express();
 
@@ -30,6 +31,7 @@ server.use(express.json());
 // Add your router file(s) here
 // server.use("/someRoute", someRouter);
 server.use(usersRouter);
+server.use(recipesRouter);
 
 // Message for "/" endpoint: Ex.: Dellrodar.herokuapp.com/
 server.get("/", (req, res) => {
