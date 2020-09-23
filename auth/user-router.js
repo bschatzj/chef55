@@ -2,6 +2,8 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Users = require('./user-model');
+const Recipes = require('../recipes/recipes-model');
+const restrict = require('../middleware/restrict');
 
 const router = express.Router();
 
@@ -23,11 +25,13 @@ router.post('/login', async (req, res, next) => {
 				message: 'Invalid Credentials',
 			});
 		}
-		const token = jwt.sign({
-      userName: user.username,
-      userId: user.id,
+
+		const payload = {
+      username: user.username,
+      id: user.id,
       name: user.name,
-    }, process.env.JWT_SECRET);
+    }
+		const token = jwt.sign(payload, process.env.JWT_SECRET);
 
 		//set Cookie
 		res.cookie('token', token);
@@ -71,6 +75,17 @@ router.get('/logout', (req, res) => {
   return res.status(200).json({ message: 'Goodbye' });
   }
   return res.status(401).json({ message: 'Please login first.' });
+})
+
+router.get("/users/:id/recipes", restrict(), async (req, res, next) => {
+
+	try {
+				const recipesRes = await Recipes.findRecipeBy({userId:req.params.id});
+				return res.json(recipesRes)
+	} catch(err) {
+		 next(err)
+	}
+
 })
 
 module.exports = router;

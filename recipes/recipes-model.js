@@ -2,24 +2,24 @@ const db = require('../data/dbConfig');
 
 function getRecipes() {
   return db("recipes as r")
-          .join("categories as c", "c.id", "r.category_id")
-          .join("users as u", "u.id", "r.user_id")
-          .select("r.id as recipe_id", "u.name as user_name", "c.name as category_name", "r.title", "r.source", "r.imgUrl")
+          .join("categories as c", "c.id", "r.categoryId")
+          .join("users as u", "u.id", "r.userId")
+          .select("r.id as recipe_id", "u.name as user_name", "c.name as category_name", "r.title", "r.source", "r.imgUrl", "r.userId as added_by")
 }
 
 function findRecipeById(id) {
   return db("recipes as r")
-          .join("categories as c", "c.id", "r.category_id")
-          .join("users as u", "u.id", "r.user_id")
+          .join("categories as c", "c.id", "r.categoryId")
+          .join("users as u", "u.id", "r.userId")
           .where("r.id",id)
-          .select("r.id as recipe_id", "u.name as user_name", "c.name as category_name", "r.title", "r.source", "r.imgUrl")
+          .select("r.id as recipe_id", "u.name as user_name", "c.name as category_name", "r.title", "r.source", "r.imgUrl", "r.instructions")
           .first()
 }
 
 function findRecipeBy(filter) {
   return db("recipes as r")
-          .join("categories as c", "c.id", "r.category_id")
-          .join("users as u", "u.id", "r.user_id")
+          .join("categories as c", "c.id", "r.categoryId")
+          .join("users as u", "u.id", "r.userId")
           .where(filter)
           .select("r.id as recipe_id", "u.name as user_name", "c.name as category_name", "r.title", "r.source", "r.imgUrl")
 }
@@ -27,21 +27,21 @@ function findRecipeBy(filter) {
 function isUserRecipe(recipe_id,user_id) {
   return db("recipes")
           .where("id",recipe_id)
-          .where("user_id",user_id)
+          .where("userId", user_id)
           .first()
 }
 
 function addRecipe(recipe) {
   return db("recipes")
          .insert(recipe)
-         .then(([id]) => findById(id))
+         .then(([id]) => findRecipeById(id))
 }
 
 function updateRecipe(recipe, id) {
   return db("recipes")
          .update(recipe)
          .where("id", id)
-         .then(count => count > 0 ? findById(id) :  null)
+         .then(count => count > 0 ? findRecipeById(id) :  null)
 }
 
 function remove(id) {
@@ -65,8 +65,8 @@ function updateRecipeIngredient(ingredient,recipe_id,old_ingredient_id) {
 function getRecipeIngredients(recipe_id, ingredient_id = 0) {
   let qry = db("recipes_ingredients as ri")
              .join("ingredients as i", "i.id", "ri.ingredient_id")
-             .join("measurements as m", "m.id", "ri.measurementId")
-             .select("ri.ingredient_id", "i.name as ingredient", "ri.unit_id", "m.name as measurements", "ri.quantity")
+             .join("measurements as m", "m.id", "ri.measurement_id")
+             .select("ri.ingredient_id", "i.name as ingredient", "ri.measurement_id", "m.name as measurements", "ri.quantity")
              .where("ri.recipe_id", recipe_id)
 
   if(ingredient_id !== 0)

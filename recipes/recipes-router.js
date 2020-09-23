@@ -5,7 +5,7 @@ const {isUserRecipe} = require('../middleware/recipes')
 
 const router = express.Router();
 
-router.get('/recipes', restrict(), async (req, res, next) => {
+router.get('/', restrict(), async (req, res, next) => {
 	try {
 		const recipes = await Recipes.getRecipes();
 		return res.status(200).json(recipes);
@@ -14,7 +14,7 @@ router.get('/recipes', restrict(), async (req, res, next) => {
 	}
 });
 
-router.get('/recipes/:id', restrict(), async (req, res, next) => {
+router.get('/:id', restrict(), async (req, res, next) => {
 	try {
 		const id = req.params.id;
 		const recipe = await Recipes.findRecipeById(id);
@@ -26,7 +26,7 @@ router.get('/recipes/:id', restrict(), async (req, res, next) => {
 	}
 });
 
-router.post('/recipes', restrict(), async (req, res, next) => {
+router.post('/', restrict(), async (req, res, next) => {
 	try {
 		const {
 			categoryId,
@@ -35,10 +35,10 @@ router.post('/recipes', restrict(), async (req, res, next) => {
 			imgUrl,
 			ingredients,
 			instructions,
-		} = req.body;
-		const ingredLength = ingredients.length;
+    } = req.body;
+    const ingredLength = ingredients.length;
 		const payload = {
-			user_id: req.id,
+			userId: req.id,
 			categoryId: categoryId,
 			title: title,
 			source: source,
@@ -55,9 +55,9 @@ router.post('/recipes', restrict(), async (req, res, next) => {
 					measurement_id: ingredients[i].measurement_id,
 					quantity: ingredients[i].quantity,
 				};
-				await recipeModel.addRecipeIngredient(ingredientsPayload);
+				await Recipes.addRecipeIngredient(ingredientsPayload);
 			}
-			const recipe_ingredient = await recipeModel.getRecipeIngredients(
+			const recipe_ingredient = await Recipes.getRecipeIngredients(
 				recipe.recipe_id
 			);
 
@@ -69,7 +69,7 @@ router.post('/recipes', restrict(), async (req, res, next) => {
 	}
 });
 
-router.put('/recipes/:id', restrict(), isUserRecipe(), async (req, res, next) => {
+router.put('/:id', restrict(), isUserRecipe(), async (req, res, next) => {
 	try {
 		const id = req.params.id;
 		const {
@@ -82,7 +82,7 @@ router.put('/recipes/:id', restrict(), isUserRecipe(), async (req, res, next) =>
 		} = req.body;
 		const ingredLength = ingredients.length;
 		const payload = {
-			user_id: req.id,
+			userId: req.id,
 			categoryId: categoryId,
 			title: title,
 			source: source,
@@ -90,10 +90,10 @@ router.put('/recipes/:id', restrict(), isUserRecipe(), async (req, res, next) =>
 			instructions: instructions,
 		};
 
-		const recipe = await recipeModel.update(payload, id);
+		const recipe = await Recipes.updateRecipe(payload, id);
 
 		if (recipe) {
-			await recipeModel.removeRecipeIngredients(recipe.recipe_id);
+			await Recipes.removeRecipeIngredients(recipe.recipe_id);
 			for (let i = 0; i < ingredLength; i++) {
 				const ingredientsPayload = {
 					recipe_id: recipe.recipe_id,
@@ -102,9 +102,9 @@ router.put('/recipes/:id', restrict(), isUserRecipe(), async (req, res, next) =>
 					quantity: ingredients[i].quantity,
 				};
 
-				await recipeModel.addRecipeIngredient(ingredientsPayload);
+				await Recipes.addRecipeIngredient(ingredientsPayload);
 			}
-			const recipe_ingredient = await recipeModel.getRecipeIngredients(
+			const recipe_ingredient = await Recipes.getRecipeIngredients(
 				recipe.recipe_id
 			);
 
@@ -122,8 +122,8 @@ router.put('/recipes/:id', restrict(), isUserRecipe(), async (req, res, next) =>
 router.delete('/:id', restrict(), isUserRecipe(), async (req, res, next) => {
   try {
     const id = req.params.id
-    await recipeModel.remove(id)
-    await recipeModel.removeRecipeIngredients(id)
+    await Recipes.remove(id)
+    await Recipes.removeRecipeIngredients(id)
     return res.status(204).end()
 
   } catch (err) {
