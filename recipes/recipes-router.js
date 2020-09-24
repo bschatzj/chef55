@@ -1,11 +1,11 @@
 const express = require('express');
 const Recipes = require('./recipes-model');
 const restrict = require('../middleware/restrict');
-const {isUserRecipe} = require('../middleware/recipes')
+const { isUserRecipe } = require('../middleware/recipes')
 
 const router = express.Router();
 
-router.get('/', restrict(), async (req, res, next) => {
+router.get('/', async (req, res, next) => {
 	try {
 		const recipes = await Recipes.getRecipes();
 		return res.status(200).json(recipes);
@@ -14,7 +14,7 @@ router.get('/', restrict(), async (req, res, next) => {
 	}
 });
 
-router.get('/:id', restrict(), async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
 	try {
 		const id = req.params.id;
 		const recipe = await Recipes.findRecipeById(id);
@@ -26,7 +26,7 @@ router.get('/:id', restrict(), async (req, res, next) => {
 	}
 });
 
-router.post('/', restrict(), async (req, res, next) => {
+router.post('/', async (req, res, next) => {
 	try {
 		const {
 			categoryId,
@@ -35,8 +35,8 @@ router.post('/', restrict(), async (req, res, next) => {
 			imgUrl,
 			ingredients,
 			instructions,
-    } = req.body;
-    const ingredLength = ingredients.length;
+		} = req.body;
+		const ingredLength = ingredients.length;
 		const payload = {
 			userId: req.id,
 			categoryId: categoryId,
@@ -69,7 +69,7 @@ router.post('/', restrict(), async (req, res, next) => {
 	}
 });
 
-router.put('/:id', restrict(), isUserRecipe(), async (req, res, next) => {
+router.put('/:id', isUserRecipe(), async (req, res, next) => {
 	try {
 		const id = req.params.id;
 		const {
@@ -119,16 +119,16 @@ router.put('/:id', restrict(), isUserRecipe(), async (req, res, next) => {
 	}
 });
 
-router.delete('/:id', restrict(), isUserRecipe(), async (req, res, next) => {
-  try {
-    const id = req.params.id
-    await Recipes.remove(id)
-    await Recipes.removeRecipeIngredients(id)
-    return res.status(204).end()
+router.delete('/:id', isUserRecipe(), async (req, res, next) => {
+	try {
+		const id = req.params.id
+		await Recipes.remove(id)
+		await Recipes.removeRecipeIngredients(id)
+		return res.status(204).end()
 
-  } catch (err) {
-    next(err)
-  }
+	} catch (err) {
+		next(err)
+	}
 
 })
 
