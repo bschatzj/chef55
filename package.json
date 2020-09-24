@@ -16,11 +16,13 @@
 	},
 	"devDependencies": {
 		"cross-env": "^7.0.2",
-		"nodemon": "^2.0.4"
+		"jest": "^26.4.2",
+		"nodemon": "^2.0.4",
+		"supertest": "^4.0.2"
 	},
 	"scripts": {
 		"server": "nodemon --require dotenv/config index.js",
-		"test": "jest",
+		"test": "cross-env NODE_ENV=testing jest",
 		"start": "node index.js",
 		"migrate": "npx knex migrate:latest && npx knex seed:run",
 		"migrate:test": "npx knex migrate:latest --env testing && npx knex seed:run --env testing",
