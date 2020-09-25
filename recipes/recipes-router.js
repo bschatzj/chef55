@@ -69,7 +69,7 @@ router.post('/', async (req, res, next) => {
 	}
 });
 
-router.put('/:id', isUserRecipe(), async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
 	try {
 		const id = req.params.id;
 		const {
@@ -91,14 +91,12 @@ router.put('/:id', isUserRecipe(), async (req, res, next) => {
 		};
 
 		const recipe = await Recipes.updateRecipe(payload, id);
-
+		console.log(ingredients)
 		if (recipe) {
 			await Recipes.removeRecipeIngredients(recipe.recipe_id);
 			for (let i = 0; i < ingredLength; i++) {
 				const ingredientsPayload = {
 					recipe_id: recipe.recipe_id,
-					ingredient_id: ingredients[i].ingredient_id,
-					measurement_id: ingredients[i].measurement_id,
 					quantity: ingredients[i].quantity,
 				};
 
@@ -119,7 +117,7 @@ router.put('/:id', isUserRecipe(), async (req, res, next) => {
 	}
 });
 
-router.delete('/:id', isUserRecipe(), async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
 	try {
 		const id = req.params.id
 		await Recipes.remove(id)
