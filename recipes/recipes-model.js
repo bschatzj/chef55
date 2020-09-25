@@ -4,7 +4,7 @@ function getRecipes() {
   return db("recipes as r")
     .join("categories as c", "c.id", "r.categoryId")
     .join("users as u", "u.id", "r.userId")
-    .select("r.id as recipe_id", "u.name as user_name", "c.name as category_name", "r.title", "r.source", "r.imgUrl", "r.userId as added_by")
+    .select("r.id as recipe_id", "u.name as user_name", "c.name as category_name", "r.title", "r.source", "r.imgUrl", "r.userId as added_by", "r.instructions as instructions")
 }
 
 function findRecipeById(id) {
@@ -63,17 +63,13 @@ function updateRecipeIngredient(ingredient, recipe_id, old_ingredient_id) {
     .where("ingredient_id", old_ingredient_id)
 }
 
-function getRecipeIngredients(recipe_id, ingredient_id = 0) {
+function getRecipeIngredients(recipe_id) {
   let qry = db("recipes_ingredients as ri")
     .join("ingredients as i", "i.id", "ri.ingredient_id")
     .join("measurements as m", "m.id", "ri.measurement_id")
     .select("ri.ingredient_id", "i.name as ingredient", "ri.measurement_id", "m.name as measurements", "ri.quantity")
     .where("ri.recipe_id", recipe_id)
-
-  if (ingredient_id !== 0)
-    return qry.where("ri.ingredient_id", ingredient_id)
-  else
-    return qry
+  return qry
 
 }
 

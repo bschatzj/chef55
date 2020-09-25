@@ -8,6 +8,7 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
 	try {
 		const recipes = await Recipes.getRecipes();
+		// const ingredients = await Recipes.getRecipeIngredients(recipes.id);
 		return res.status(200).json(recipes);
 	} catch (err) {
 		return next(err);
