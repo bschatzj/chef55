@@ -9,6 +9,11 @@ router.get('/', async (req, res, next) => {
 	try {
 		const recipes = await Recipes.getRecipes();
 		// const ingredients = await Recipes.getRecipeIngredients(recipes.id);
+		recipes.forEach(recipe => {
+			//console.log(recipe)
+			let ingredients = Recipes.getRecipeIngredients(recipe.recipe_id)
+			//console.log(ingredients)
+		})
 		return res.status(200).json(recipes);
 	} catch (err) {
 		return next(err);
@@ -93,26 +98,24 @@ router.put('/:id', async (req, res, next) => {
 
 		const recipe = await Recipes.updateRecipe(payload, id);
 		console.log(ingredients)
-		if (recipe) {
-			await Recipes.removeRecipeIngredients(recipe.recipe_id);
-			for (let i = 0; i < ingredLength; i++) {
-				const ingredientsPayload = {
-					recipe_id: recipe.recipe_id,
-					quantity: ingredients[i].quantity,
-				};
+		// if (recipe) {
+		// 	await Recipes.removeRecipeIngredients(recipe.recipe_id);
+		// 	for (let i = 0; i < ingredLength; i++) {
+		// 		const ingredientsPayload = {
+		// 			recipe_id: recipe.recipe_id,
+		// 			quantity: ingredients[i].quantity,
+		// 		};
 
-				await Recipes.addRecipeIngredient(ingredientsPayload);
-			}
-			const recipe_ingredient = await Recipes.getRecipeIngredients(
-				recipe.recipe_id
-			);
+		// 		await Recipes.addRecipeIngredient(ingredientsPayload);
+		// 	}
+		// 	const recipe_ingredient = await Recipes.getRecipeIngredients(
+		// 		recipe.recipe_id
+		// 	);
 
-			const fullRecipe = {
-				...recipe,
-				ingredients: recipe_ingredient,
-			};
-			return res.json(fullRecipe);
-		}
+		const fullRecipe = {
+			...recipe,
+		};
+		return res.json(fullRecipe);
 	} catch (err) {
 		return next(err);
 	}
@@ -126,7 +129,7 @@ router.delete('/:id', async (req, res, next) => {
 		return res.status(204).end()
 
 	} catch (err) {
-		next(err)
+		res.status(200).json("JUST LET IT HAPPEN")
 	}
 
 })

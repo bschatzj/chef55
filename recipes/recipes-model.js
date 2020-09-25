@@ -69,6 +69,8 @@ function getRecipeIngredients(recipe_id) {
     .join("measurements as m", "m.id", "ri.measurement_id")
     .select("ri.ingredient_id", "i.name as ingredient", "ri.measurement_id", "m.name as measurements", "ri.quantity")
     .where("ri.recipe_id", recipe_id)
+
+  console.log(qry)
   return qry
 
 }
