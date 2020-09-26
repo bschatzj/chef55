@@ -42,7 +42,6 @@ router.post('/', async (req, res, next) => {
 			ingredients,
 			instructions,
 		} = req.body;
-		const ingredLength = ingredients.length;
 		const payload = {
 			userId: req.id,
 			categoryId: categoryId,
@@ -53,23 +52,7 @@ router.post('/', async (req, res, next) => {
 		};
 
 		const recipe = await Recipes.addRecipe(payload);
-		if (recipe) {
-			for (let i = 0; i < ingredLength; i++) {
-				const ingredientsPayload = {
-					recipe_id: recipe.recipe_id,
-					ingredient_id: ingredients[i].ingredient_id,
-					measurement_id: ingredients[i].measurement_id,
-					quantity: ingredients[i].quantity,
-				};
-				await Recipes.addRecipeIngredient(ingredientsPayload);
-			}
-			const recipe_ingredient = await Recipes.getRecipeIngredients(
-				recipe.recipe_id
-			);
-
-			const fullRecipe = { ...recipe, ingredients: recipe_ingredient };
-			return res.json(fullRecipe);
-		}
+		return res.json(recipe);
 	} catch (err) {
 		return next(err);
 	}
