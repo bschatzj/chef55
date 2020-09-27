@@ -52,7 +52,7 @@ router.post('/', async (req, res, next) => {
 		};
 
 		const recipe = await Recipes.addRecipe(payload);
-		return res.json(recipe);
+		return res.json("Brendan is awesome!!!");
 	} catch (err) {
 		return next(err);
 	}
