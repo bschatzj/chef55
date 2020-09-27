@@ -33,6 +33,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
+	console.log(req.id)
 	try {
 		const {
 			categoryId,
@@ -43,7 +44,7 @@ router.post('/', async (req, res, next) => {
 			instructions,
 		} = req.body;
 		const payload = {
-			userId: req.id,
+			userId: 1,
 			categoryId: categoryId,
 			title: title,
 			source: source,

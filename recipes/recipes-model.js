@@ -32,10 +32,9 @@ function isUserRecipe(recipe_id, user_id) {
 }
 
 function addRecipe(recipe) {
-  db("recipes")
+  console.log(recipe)
+  return db("recipes")
     .insert(recipe)
-
-  return (recipe)
 }
 
 function updateRecipe(recipe, id) {
