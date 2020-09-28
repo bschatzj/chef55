@@ -45,7 +45,7 @@ router.post('/', async (req, res, next) => {
 		} = req.body;
 		const payload = {
 			userId: 1,
-			categoryId: categoryId,
+			categoryId: 1,
 			title: title,
 			source: source,
 			imgUrl: imgUrl,
